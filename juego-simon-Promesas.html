@@ -6,7 +6,7 @@
     <style>
       body {
         margin: 0;
-        background: #dedede;
+        background: #b5b3b3;
         display: flex;
         align-items: center;
         height: 100vh;
@@ -111,9 +111,9 @@
         class Juego{
             constructor(){
                 this.inicializar = this.inicializar.bind(this)
+                this.agregarEventosClic = this.agregarEventosClic.bind(this)
                 this.inicializar()
                 this.generarSecuencia()
-                debugger
                 setTimeout(this.siguienteNivel, 500)
             }
             inicializar() {
@@ -134,24 +134,27 @@
             }
             siguienteNivel(){
                 this.subnivel = 0 //No hace falta que exista la propiedad subnivel en el constructor.
-                //this.apagarColorDeFondo()
-                //setTimeout(() => {
+                this.apagarColorDeFondo()
+                setTimeout(() => {
                   this.iluminarSecuencia()
-                  this.agregarEventosClic()
-                //}, 500)
+                  .then (this.agregarEventosClic)
+                }, 500)
             }
             iluminarSecuencia(){
-                for(let i = 0; i < this.nivel; i++){
-                    // let color = this.transformarNumeroAColor(this.secuencia[i])
-                    //Al declarar color con 'let', JS va hacer que se mantenga la variable para cada ciclo.
-                    //Caso contrario, la varible color va a ser pisada con el valor del último ciclo.
-                    const color = this.transformarNumeroAColor(this.secuencia[i])
-                    //Otra opción es usar directamente 'const', ya que luego no le modificamos el color.
-                    setTimeout( () => this.iluminarColor(color), 1000 * i)
-                }
-                // setTimeout(() => {
-                //         this.prenderColorDeFondo()
-                //     }, 1000 * this.nivel);
+                return new Promise( (resolve, reject) => {
+                  for(let i = 0; i < this.nivel; i++){
+                      // let color = this.transformarNumeroAColor(this.secuencia[i])
+                      //Al declarar color con 'let', JS va hacer que se mantenga la variable para cada ciclo.
+                      //Caso contrario, la varible color va a ser pisada con el valor del último ciclo.
+                      const color = this.transformarNumeroAColor(this.secuencia[i])
+                      //Otra opción es usar directamente 'const', ya que luego no le modificamos el color.
+                      setTimeout( () => this.iluminarColor(color), 1000 * i)
+                  }
+                  setTimeout(() => {
+                          this.prenderColorDeFondo()
+                          resolve()
+                      }, 1000 * this.nivel);
+                })
             }
             transformarNumeroAColor(numero){
                 switch(numero){
@@ -215,7 +218,7 @@
                 .then(this.inicializar)
             }
             perdioElJuego(){
-                swal('Simon dice','Perdiste!','error')
+                swal('Simon dice',`Perdiste! Llegaste hasta el nivel ${this.nivel}`,'error')
                 .then(this.inicializar)
             }
             toggleBtnEmpezar(){
@@ -229,7 +232,7 @@
                 document.body.style.background = '#000100'
             }
             prenderColorDeFondo(){
-                document.body.style.background = '#dedede'
+                document.body.style.background = '#b5b3b3'
             }
             
             

@@ -36,7 +36,7 @@ obtenerPersonaje(1)
     })
     .then( (personaje4) => {
         console.log(`El personaje 4 es ${personaje4.name}`)
-        return obtenerPersonaje(5)
+        return obtenerPersonaje(5)  
     })
     .then( (personaje5) => {
         console.log(`El personaje 5 es ${personaje5.name}`)
